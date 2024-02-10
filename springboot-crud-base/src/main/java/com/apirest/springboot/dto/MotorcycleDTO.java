@@ -7,9 +7,12 @@ public class MotorcycleDTO {
 	private Long id;
 	private String domain;
 	private String brand;
-//	private String model;
-//	private String cylinder;
-//	private String year;
-//	private String kilometers;
+	private String model;
+	private String cylinder;
+	private String year;
+	private String kilometers;
+	private String comment;
+	private String chassis;
+	private String motorNumber;
 
 }

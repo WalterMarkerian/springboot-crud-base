@@ -10,7 +10,7 @@ import com.apirest.springboot.dto.MotorcycleDTO;
 import com.apirest.springboot.entities.Motorcycle;
 import com.apirest.springboot.exceptions.ResourceNotFoundException;
 import com.apirest.springboot.repository.MotorcycleRepository;
-import com.apirest.springboot.translator.ConvertMotorcycle;
+import com.apirest.springboot.utils.ConvertMotorcycle;
 
 @Service
 public class MotorcycleServiceImpl implements MotorcycleService {
@@ -25,9 +25,9 @@ public class MotorcycleServiceImpl implements MotorcycleService {
 	public MotorcycleDTO createMotorcycle(MotorcycleDTO motorcycleDTO) {
 			
 		Motorcycle motorcycle = convertMotorcycle.toEntity(motorcycleDTO);
-			Motorcycle newMotorcycle = motorcycleRepository.save(motorcycle);
-			MotorcycleDTO motorcycleResponse = convertMotorcycle.toDTO(newMotorcycle);
-			
+		Motorcycle newMotorcycle = motorcycleRepository.save(motorcycle);
+		MotorcycleDTO motorcycleResponse = convertMotorcycle.toDTO(newMotorcycle);
+		
 		return motorcycleResponse;
 	}
 

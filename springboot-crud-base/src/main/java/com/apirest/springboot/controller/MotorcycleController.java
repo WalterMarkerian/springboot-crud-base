@@ -24,15 +24,16 @@ public class MotorcycleController {
 	@Autowired
 	private MotorcycleService motorcycleService;
 	
+	@GetMapping
+	public List<MotorcycleDTO> listMotorcycles(){
+		return motorcycleService.getAllMotorcycles();
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<MotorcycleDTO> getMotorcycleById(@PathVariable(name = "id") Long id){
 		return ResponseEntity.ok(motorcycleService.getMotorcycleById(id));
 	}
 	
-	@GetMapping
-	public List<MotorcycleDTO> listMotorcycles(){
-		return motorcycleService.getAllMotorcycles();
-	}
 	
 	@PostMapping
 	public ResponseEntity<MotorcycleDTO> saveMotorcycle(@RequestBody MotorcycleDTO motorcycleDTO){
