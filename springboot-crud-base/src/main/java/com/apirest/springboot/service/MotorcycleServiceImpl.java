@@ -44,6 +44,14 @@ public class MotorcycleServiceImpl implements MotorcycleService {
 				.orElseThrow(() -> new ResourceNotFoundException("Motorcycle", "id", id));
 		return convertMotorcycle.toDTO(motorcycle);
 	}
+	
+	
+	@Override
+	public MotorcycleDTO getMotorcycleByDomain(String domain) {
+		Motorcycle motorcycle = motorcycleRepository.findByDomain(domain);
+//				.orElseThrow(() -> new ResourceNotFoundException(": " + domain));
+		return convertMotorcycle.toDTO(motorcycle);
+	}
 
 	@Override
 	public MotorcycleDTO updateMotorcycle(MotorcycleDTO motorcycleDTO, Long id) {
@@ -62,5 +70,15 @@ public class MotorcycleServiceImpl implements MotorcycleService {
 				.orElseThrow(() -> new ResourceNotFoundException("Motorcycle", "id", id));
 		motorcycleRepository.delete(motorcycle);
 	}
+
+	@Override
+	public List<MotorcycleDTO> getAllMotorcyclesByCustomerId(Long CustomerId) {
+		List<Motorcycle> motorcycles = motorcycleRepository.findByCustomerId(CustomerId);
+		return motorcycles.stream().map(motorcycle -> convertMotorcycle.toDTO(motorcycle)).collect(Collectors.toList());
+	}
+
+
+
+
 
 }

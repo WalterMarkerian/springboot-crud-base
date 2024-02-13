@@ -7,10 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apirest.springboot.dto.CustomerDTO;
+import com.apirest.springboot.dto.MotorcycleDTO;
 import com.apirest.springboot.entities.Customer;
+import com.apirest.springboot.entities.Motorcycle;
 import com.apirest.springboot.exceptions.ResourceNotFoundException;
 import com.apirest.springboot.repository.CustomerRepository;
+import com.apirest.springboot.repository.MotorcycleRepository;
 import com.apirest.springboot.utils.ConvertCustomer;
+import com.apirest.springboot.utils.ConvertMotorcycle;
 
 @Service
 public class CustomerServiceImpl implements CustomerService{
@@ -19,7 +23,13 @@ public class CustomerServiceImpl implements CustomerService{
 	private CustomerRepository customerRepository;
 	
 	@Autowired
+	private MotorcycleRepository motorcycleRepository;
+
+	@Autowired
 	private ConvertCustomer convertCustomer;
+	
+	@Autowired
+	private ConvertMotorcycle convertMotorcycle;
 	
 
 	@Override
@@ -65,6 +75,20 @@ public class CustomerServiceImpl implements CustomerService{
 				.orElseThrow(() -> new ResourceNotFoundException("Customer", "id", id));
 		customerRepository.delete(customer);
 	}
+
+	@Override
+	public List<CustomerDTO> getAllMotoyclesByCustomer() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<MotorcycleDTO> getAllMotorcyclesByCustomerId(Long CustomerId) {
+		List<Motorcycle> motorcycles = motorcycleRepository.findByCustomerId(CustomerId);
+		return motorcycles.stream().map(motorcycle -> convertMotorcycle.toDTO(motorcycle)).collect(Collectors.toList());
+	}
+
+
 
 
 }

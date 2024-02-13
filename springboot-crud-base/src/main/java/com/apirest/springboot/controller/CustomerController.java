@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apirest.springboot.dto.CustomerDTO;
+import com.apirest.springboot.dto.MotorcycleDTO;
 import com.apirest.springboot.service.CustomerService;
 
 
@@ -30,13 +31,18 @@ public class CustomerController {
 		return customerService.getAllCustomers();
 	}
 	
+	@GetMapping("/{customerId}/motos")
+	public List<MotorcycleDTO> getAllMotorcyclesByCustomerId(@PathVariable(value = "customerId") Long customerId){
+		return customerService.getAllMotorcyclesByCustomerId(customerId);
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable(name = "id") Long id){
 		return ResponseEntity.ok(customerService.getCustomerById(id));
 	}
 	
 	
-	@PostMapping
+	@PostMapping("/cliente")
 	public ResponseEntity<CustomerDTO> saveCustomer(@RequestBody CustomerDTO customerDTO){
 		return new ResponseEntity<>(customerService.createCustomer(customerDTO),HttpStatus.CREATED);
 	}

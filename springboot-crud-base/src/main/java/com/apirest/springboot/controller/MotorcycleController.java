@@ -29,13 +29,23 @@ public class MotorcycleController {
 		return motorcycleService.getAllMotorcycles();
 	}
 	
+	@GetMapping("/{customerId}/motos")
+	public List<MotorcycleDTO> listMotorcyclesByCustomerId(@PathVariable(value = "customerId") Long customerId){
+		return motorcycleService.getAllMotorcyclesByCustomerId(customerId);
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<MotorcycleDTO> getMotorcycleById(@PathVariable(name = "id") Long id){
 		return ResponseEntity.ok(motorcycleService.getMotorcycleById(id));
 	}
 	
+	@GetMapping("/domain/{domain}")
+	public ResponseEntity<MotorcycleDTO> getMotorcycleByDomain(@PathVariable(name = "domain") String domain){
+		return ResponseEntity.ok(motorcycleService.getMotorcycleByDomain(domain));
+	}
 	
-	@PostMapping
+	
+	@PostMapping("/moto")
 	public ResponseEntity<MotorcycleDTO> saveMotorcycle(@RequestBody MotorcycleDTO motorcycleDTO){
 		return new ResponseEntity<>(motorcycleService.createMotorcycle(motorcycleDTO),HttpStatus.CREATED);
 	}

@@ -7,7 +7,7 @@ import com.apirest.springboot.dto.MotorcycleDTO;
 public interface MotorcycleService {
 	public MotorcycleDTO createMotorcycle(MotorcycleDTO motorcycleDTO);
 	public List<MotorcycleDTO> getAllMotorcycles();
-//	public List<MotorcycleDTO> getAllMotorcyclesByClient();
+	public List<MotorcycleDTO> getAllMotorcyclesByCustomerId(Long CustomerId);
 	public MotorcycleDTO getMotorcycleById(Long id);
 	//	public MotorcycleDTO getMotorcycleByClient(String Client);
 	//	public MotorcycleDTO getMotorcycleByDomain(String domain);
@@ -17,4 +17,6 @@ public interface MotorcycleService {
 
 	public void deleteMotorcycleById(Long id);
 //	public void deleteMotorcycleByBrand(Long id);
+
+	public MotorcycleDTO getMotorcycleByDomain(String domain);
 }
