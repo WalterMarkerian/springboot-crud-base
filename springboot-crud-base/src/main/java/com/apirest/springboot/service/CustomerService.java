@@ -14,4 +14,5 @@ public interface CustomerService {
 	public CustomerDTO updateCustomer(CustomerDTO customerDTO, Long id);
 
 	public void deleteCustomerById(Long id);
+	public List<CustomerDTO> getAllCustomersWithMotorcycles();
 }

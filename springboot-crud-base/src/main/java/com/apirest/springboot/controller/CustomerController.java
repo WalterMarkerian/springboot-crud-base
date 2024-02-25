@@ -31,6 +31,11 @@ public class CustomerController {
 		return customerService.getAllCustomers();
 	}
 	
+    @GetMapping("/motos")
+    public List<CustomerDTO> getAllCustomersWithMotorcycles() {
+        return customerService.getAllCustomersWithMotorcycles();
+    }
+	
 	@GetMapping("/{customerId}/motos")
 	public List<MotorcycleDTO> getAllMotorcyclesByCustomerId(@PathVariable(value = "customerId") Long customerId){
 		return customerService.getAllMotorcyclesByCustomerId(customerId);
@@ -42,7 +47,7 @@ public class CustomerController {
 	}
 	
 	
-	@PostMapping("/cliente")
+	@PostMapping("/crear")
 	public ResponseEntity<CustomerDTO> saveCustomer(@RequestBody CustomerDTO customerDTO){
 		return new ResponseEntity<>(customerService.createCustomer(customerDTO),HttpStatus.CREATED);
 	}

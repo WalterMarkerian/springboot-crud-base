@@ -10,7 +10,7 @@ import com.apirest.springboot.dto.MotorcycleDTO;
 import com.apirest.springboot.entities.Motorcycle;
 import com.apirest.springboot.exceptions.ResourceNotFoundException;
 import com.apirest.springboot.repository.MotorcycleRepository;
-import com.apirest.springboot.utils.ConvertMotorcycle;
+import com.apirest.springboot.utils.ConvertTo;
 
 @Service
 public class MotorcycleServiceImpl implements MotorcycleService {
@@ -19,14 +19,14 @@ public class MotorcycleServiceImpl implements MotorcycleService {
 	private MotorcycleRepository motorcycleRepository;
 	
 	@Autowired
-	private ConvertMotorcycle convertMotorcycle;
+	private ConvertTo convertTo;
 
 	@Override
 	public MotorcycleDTO createMotorcycle(MotorcycleDTO motorcycleDTO) {
 			
-		Motorcycle motorcycle = convertMotorcycle.toEntity(motorcycleDTO);
+		Motorcycle motorcycle = convertTo.mapToMotorcycleEntity(motorcycleDTO);
 		Motorcycle newMotorcycle = motorcycleRepository.save(motorcycle);
-		MotorcycleDTO motorcycleResponse = convertMotorcycle.toDTO(newMotorcycle);
+		MotorcycleDTO motorcycleResponse = convertTo.mapToMotorcycleDTO(newMotorcycle);
 		
 		return motorcycleResponse;
 	}
@@ -34,7 +34,7 @@ public class MotorcycleServiceImpl implements MotorcycleService {
 	@Override
 	public List<MotorcycleDTO> getAllMotorcycles() {
 		List<Motorcycle> motorcycles = motorcycleRepository.findAll();
-		return motorcycles.stream().map(motorcycle -> convertMotorcycle.toDTO(motorcycle))
+		return motorcycles.stream().map(motorcycle -> convertTo.mapToMotorcycleDTO(motorcycle))
 				.collect(Collectors.toList());
 	}
 
@@ -42,7 +42,7 @@ public class MotorcycleServiceImpl implements MotorcycleService {
 	public MotorcycleDTO getMotorcycleById(Long id) {
 		Motorcycle motorcycle = motorcycleRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Motorcycle", "id", id));
-		return convertMotorcycle.toDTO(motorcycle);
+		return convertTo.mapToMotorcycleDTO(motorcycle);
 	}
 	
 	
@@ -50,7 +50,7 @@ public class MotorcycleServiceImpl implements MotorcycleService {
 	public MotorcycleDTO getMotorcycleByDomain(String domain) {
 		Motorcycle motorcycle = motorcycleRepository.findByDomain(domain);
 //				.orElseThrow(() -> new ResourceNotFoundException(": " + domain));
-		return convertMotorcycle.toDTO(motorcycle);
+		return convertTo.mapToMotorcycleDTO(motorcycle);
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class MotorcycleServiceImpl implements MotorcycleService {
 		motorcycle.setDomain(motorcycleDTO.getDomain());
 		
 		Motorcycle motorcycleUpdated = motorcycleRepository.save(motorcycle);
-		return convertMotorcycle.toDTO(motorcycleUpdated);
+		return convertTo.mapToMotorcycleDTO(motorcycleUpdated);
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class MotorcycleServiceImpl implements MotorcycleService {
 	@Override
 	public List<MotorcycleDTO> getAllMotorcyclesByCustomerId(Long CustomerId) {
 		List<Motorcycle> motorcycles = motorcycleRepository.findByCustomerId(CustomerId);
-		return motorcycles.stream().map(motorcycle -> convertMotorcycle.toDTO(motorcycle)).collect(Collectors.toList());
+		return motorcycles.stream().map(motorcycle -> convertTo.mapToMotorcycleDTO(motorcycle)).collect(Collectors.toList());
 	}
 
 

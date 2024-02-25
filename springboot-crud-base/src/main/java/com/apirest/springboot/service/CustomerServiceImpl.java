@@ -13,8 +13,7 @@ import com.apirest.springboot.entities.Motorcycle;
 import com.apirest.springboot.exceptions.ResourceNotFoundException;
 import com.apirest.springboot.repository.CustomerRepository;
 import com.apirest.springboot.repository.MotorcycleRepository;
-import com.apirest.springboot.utils.ConvertCustomer;
-import com.apirest.springboot.utils.ConvertMotorcycle;
+import com.apirest.springboot.utils.ConvertTo;
 
 @Service
 public class CustomerServiceImpl implements CustomerService{
@@ -26,32 +25,36 @@ public class CustomerServiceImpl implements CustomerService{
 	private MotorcycleRepository motorcycleRepository;
 
 	@Autowired
-	private ConvertCustomer convertCustomer;
+	private ConvertTo converterTo;
 	
-	@Autowired
-	private ConvertMotorcycle convertMotorcycle;
 	
 
 	@Override
 	public CustomerDTO createCustomer(CustomerDTO customerDTO){
-			Customer customer = convertCustomer.toEntity(customerDTO);
+			Customer customer = converterTo.mapToCustomerEntity(customerDTO);
 			Customer newCustomer = customerRepository.save(customer);
-			CustomerDTO customerResponse = convertCustomer.toDTO(newCustomer);
-		return customerResponse;
+		return converterTo.mapToCustomerDTO(newCustomer);
+
 	}
 
 	@Override
 	public List<CustomerDTO> getAllCustomers() {
 		List<Customer> customers = customerRepository.findAll();
-		return customers.stream().map(customer -> convertCustomer.toDTO(customer))
+		return customers.stream().map(customer -> converterTo.mapToCustomerDTO(customer))
 				.collect(Collectors.toList());
 	}
 
 	@Override
+	 public List<CustomerDTO> getAllCustomersWithMotorcycles() {
+       List<Customer> customers = customerRepository.findAllWithMotorcycles();
+       return converterTo.mapToDTOList(customers);
+   }
+	
+	@Override
 	public CustomerDTO getCustomerById(Long id) {
 		Customer customer = customerRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Customer", "id", id));
-		return convertCustomer.toDTO(customer);
+		return converterTo.mapToCustomerDTO(customer);
 	}
 
 	@Override
@@ -66,7 +69,7 @@ public class CustomerServiceImpl implements CustomerService{
 		customer.setComment(customerDTO.getComment());
 		
 		Customer customerUpdated = customerRepository.save(customer);
-		return convertCustomer.toDTO(customerUpdated);
+		return converterTo.mapToCustomerDTO(customerUpdated);
 	}
 
 	@Override
@@ -85,8 +88,9 @@ public class CustomerServiceImpl implements CustomerService{
 	@Override
 	public List<MotorcycleDTO> getAllMotorcyclesByCustomerId(Long CustomerId) {
 		List<Motorcycle> motorcycles = motorcycleRepository.findByCustomerId(CustomerId);
-		return motorcycles.stream().map(motorcycle -> convertMotorcycle.toDTO(motorcycle)).collect(Collectors.toList());
+		return motorcycles.stream().map(motorcycle -> converterTo.mapToMotorcycleDTO(motorcycle)).collect(Collectors.toList());
 	}
+
 
 
 
