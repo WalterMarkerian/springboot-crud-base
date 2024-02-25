@@ -1248,3 +1248,6 @@ org.apache.maven.settings.building.SettingsBuildingException: 1 problem was enco
 2024-02-25 16:15:24,068 [Worker-49: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
 2024-02-25 16:15:24,080 [Worker-49: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
 2024-02-25 16:15:24,083 [Worker-49: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Desarrollo\workspace\spring\springboot-crud-base\springboot-crud-base\src\test\resources
+2024-02-25 16:16:06,972 [Worker-32: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-02-25 16:16:06,977 [Worker-32: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2024-02-25 16:16:06,978 [Worker-32: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Desarrollo\workspace\spring\springboot-crud-base\springboot-crud-base\src\test\resources
