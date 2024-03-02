@@ -13,8 +13,7 @@ public interface MotorcycleRepository extends JpaRepository<Motorcycle, Long> {
 
 //	Optional<Motorcycle> findById(Long motorcycleId);
 
-//	public List<Motorcycle> findByCustomerId(Long motorcycleId);
-	
+	public List<Motorcycle> findAllByCustomerCustomerId(Long customerId);	
 //	public Motorcycle findByDomain(String domain);
 	
 

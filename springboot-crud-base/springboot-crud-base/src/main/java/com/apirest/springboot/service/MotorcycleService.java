@@ -8,7 +8,7 @@ public interface MotorcycleService {
 	public List<MotorcycleDTO> getAllMotorcycles();
 	
 //	public MotorcycleDTO createMotorcycle(MotorcycleDTO motorcycleDTO);
-//	public List<MotorcycleDTO> getAllMotorcyclesByCustomerId(Long motorcycleId);
+	public List<MotorcycleDTO> getAllMotorcyclesByCustomerId(Long customerId);
 //	public MotorcycleDTO updateMotorcycle(MotorcycleDTO motorcycleDTO, Long motorcycleId);
 //	public void deleteMotorcycleByMotorcycleId(Long motorcycleId);
 //	public MotorcycleDTO getMotorcycleByMotorcycleId(Long motorcycleId);

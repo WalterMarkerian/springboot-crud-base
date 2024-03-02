@@ -28,6 +28,23 @@ public class MotorcycleServiceImpl implements MotorcycleService {
 		return motorcycles.stream().map(motorcycle -> convertTo.mapToMotorcycleDTO(motorcycle))
 				.collect(Collectors.toList());
 	}
+
+	@Override
+    public List<MotorcycleDTO> getAllMotorcyclesByCustomerId(Long customerId) {
+        List<Motorcycle> motorcycles = motorcycleRepository.findAllByCustomerCustomerId(customerId);
+        return motorcycles.stream()
+                .map(convertTo::mapToMotorcycleDTO)
+                .collect(Collectors.toList());
+    }
+	
+//	@Override
+//	public MotorcycleDTO getMotorcycleByMotorcycleId(Long motorcycleId) {
+//		Motorcycle motorcycle = motorcycleRepository.findById(motorcycleId)
+//				.orElseThrow(() -> new ResourceNotFoundException("Motorcycle", "motorcycleId", motorcycleId));
+//		return convertTo.mapToMotorcycleDTO(motorcycle);
+//	}
+	
+	
 //	
 //	
 //	
@@ -43,12 +60,7 @@ public class MotorcycleServiceImpl implements MotorcycleService {
 //
 //
 //
-//	@Override
-//	public MotorcycleDTO getMotorcycleByMotorcycleId(Long motorcycleId) {
-//		Motorcycle motorcycle = motorcycleRepository.findById(motorcycleId)
-//				.orElseThrow(() -> new ResourceNotFoundException("Motorcycle", "motorcycleId", motorcycleId));
-//		return convertTo.mapToMotorcycleDTO(motorcycle);
-//	}
+
 //	
 //	
 //	@Override

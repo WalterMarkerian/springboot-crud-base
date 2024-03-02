@@ -30,10 +30,11 @@ public class MotorcycleController {
 		return motorcycleService.getAllMotorcycles();
 	}
 	
-//	@GetMapping("/{customerId}/motos")
-//	public List<MotorcycleDTO> listMotorcyclesByCustomerId(@PathVariable(value = "customerId") Long customerId){
-//		return motorcycleService.getAllMotorcyclesByCustomerID(customerId);
-//	}
+	@GetMapping("/cliente/{customerId}")
+	public ResponseEntity<List<MotorcycleDTO>> getAllMotorcyclesByCustomerId(@PathVariable Long customerId) {
+        List<MotorcycleDTO> motorcycles = motorcycleService.getAllMotorcyclesByCustomerId(customerId);
+        return ResponseEntity.ok(motorcycles);
+    }
 //	
 //	@GetMapping("/{id}")
 //	public ResponseEntity<MotorcycleDTO> getMotorcycleByUUID(@PathVariable(name = "id") UUID uuid){
