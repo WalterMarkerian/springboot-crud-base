@@ -8,7 +8,7 @@ import com.apirest.springboot.dto.MotorcycleDTO;
 public interface CustomerService {
 	public List<CustomerDTO> getAllCustomers();
 //	public CustomerDTO createCustomer(CustomerDTO customerDTO);
-	public CustomerDTO createCustomer(CustomerDTO customerDTO);
+	public CustomerDTO createCustomerWhitMotorcycle(CustomerDTO customerDTO);
 
 //
 //	public List<CustomerDTO> getAllMotoyclesByCustomer();
