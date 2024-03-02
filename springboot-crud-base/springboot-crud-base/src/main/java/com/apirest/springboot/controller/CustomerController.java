@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apirest.springboot.dto.CustomerDTO;
@@ -43,6 +44,18 @@ public class CustomerController {
 	public List<CustomerDTO> listCustomers(){
 		return customerService.getAllCustomers();
 	}
+	
+    @GetMapping("/porCliente")
+    public ResponseEntity<CustomerDTO> getCustomerById(@RequestParam Long customerId) {
+        CustomerDTO customer = customerService.getCustomerById(customerId);
+        return new ResponseEntity<>(customer, HttpStatus.OK);
+    }
+    
+    @PutMapping("/actualizar")
+    public ResponseEntity<CustomerDTO> updateCustomer(@RequestBody CustomerDTO updatedCustomerDTO) {
+        CustomerDTO updatedCustomer = customerService.updateCustomer(updatedCustomerDTO);
+        return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
+    }
 
 //	@PostMapping("/crear")
 //	public ResponseEntity<CustomerDTO> saveCustomer(@RequestBody CustomerDTO customerDTO){
@@ -56,6 +69,8 @@ public class CustomerController {
         return new ResponseEntity<>(createdCustomer, HttpStatus.CREATED);
     }
 	
+    
+
 	
 	
 //	@PostMapping("/crear")
@@ -81,11 +96,7 @@ public class CustomerController {
 //	
 
 //	
-//	@PutMapping("/{customerId}")
-//	public ResponseEntity<CustomerDTO> updateCustomer(@RequestBody CustomerDTO customerDTO, @PathVariable(name = "customerId") Long customerId){
-//		CustomerDTO customerResponse = customerService.updateCustomer(customerDTO, customerId);
-//		return new ResponseEntity<>(customerResponse,HttpStatus.OK);
-//	}
+
 //	
 //	@DeleteMapping("/{id}")
 //	public ResponseEntity<String> deleteCustomer(@PathVariable(name = "customerId") Long customerId){

@@ -34,6 +34,14 @@ public class CustomerServiceImpl implements CustomerService {
 
 	private static final Logger logger = LogManager.getLogger(CustomerServiceImpl.class);
 
+
+	@Override
+	public CustomerDTO getCustomerById(Long customerId) {
+		Customer customer = customerRepository.findById(customerId)
+				.orElseThrow(() -> new ResourceNotFoundException("Customer", "customerId", customerId));
+		return convertTo.mapToCustomerDTO(customer);
+	}
+
 	@Override
 	public List<CustomerDTO> getAllCustomers() {
 		List<Customer> customers = customerRepository.findAll();
@@ -47,16 +55,15 @@ public class CustomerServiceImpl implements CustomerService {
 //		return convertTo.mapToCustomerDTO(newCustomer);
 //	}
 
-    @Transactional
+	@Transactional
 	public CustomerDTO createCustomerWhitMotorcycle(CustomerDTO customerDTO) {
-        // Mapea el DTO del cliente a la entidad Customer
+		// Mapea el DTO del cliente a la entidad Customer
 		Customer customer = convertTo.mapToCustomerEntity(customerDTO);
 
 		// Mapea los DTO de motocicletas a entidades Motorcycle
-        List<Motorcycle> motorcycles = customerDTO.getMotorcycles().stream()
-                .map(motorcycleDTO -> convertTo.mapToMotorcycleEntity(motorcycleDTO))
-                .collect(Collectors.toList());
-        
+		List<Motorcycle> motorcycles = customerDTO.getMotorcycles().stream()
+				.map(motorcycleDTO -> convertTo.mapToMotorcycleEntity(motorcycleDTO)).collect(Collectors.toList());
+
 		// Establece la relación entre Customer y Motorcycle
 		for (Motorcycle motorcycle : motorcycles) {
 			motorcycle.setCustomer(customer);
@@ -66,7 +73,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 		// Guarda el customer y sus motorcycles en la base de datos
 		Customer savedCustomer = customerRepository.save(customer);
-		
+
 		// Puedes guardar también los motorcycles si lo necesitas
 		// motorcycleRepository.saveAll(motorcycles);
 
@@ -74,15 +81,27 @@ public class CustomerServiceImpl implements CustomerService {
 		return convertTo.mapToCustomerDTO(savedCustomer);
 	}
 
+	@Override
+    public CustomerDTO updateCustomer(CustomerDTO updatedCustomerDTO) {
+        Customer existingCustomer = customerRepository.findById(updatedCustomerDTO.getCustomerId())
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró el cliente con ID: ", "customerId", updatedCustomerDTO.getCustomerId()));
+
+        convertTo.mapUpdatedCustomerDTOToEntity(updatedCustomerDTO, existingCustomer);
+        existingCustomer = customerRepository.save(existingCustomer);
+
+        return convertTo.mapToCustomerDTO(existingCustomer);
+    }
+
+
+	
+	
+	
+	
+	
 //
 //
 //	
-//	@Override
-//	public CustomerDTO getCustomerById(Long customerId) {
-//		Customer customer = customerRepository.findById(customerId)
-//				.orElseThrow(() -> new ResourceNotFoundException("Customer", "customerId", customerId));
-//		return converterTo.mapToCustomerDTO(customer);
-//	}
+
 //
 //	@Override
 //	public CustomerDTO updateCustomer(CustomerDTO customerDTO, Long customerId) {

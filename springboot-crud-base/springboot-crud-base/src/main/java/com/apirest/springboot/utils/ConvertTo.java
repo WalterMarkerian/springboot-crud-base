@@ -93,5 +93,18 @@ public class ConvertTo {
 		return motorcycle;
 	}
 	
+	
+	public void mapUpdatedCustomerDTOToEntity(CustomerDTO updatedDTO, Customer existingEntity) {
+        // Mapear los campos que deseas actualizar
+        existingEntity.setName(updatedDTO.getName());
+        existingEntity.setSurname(updatedDTO.getSurname());
+        existingEntity.setPhone(updatedDTO.getPhone());
+        existingEntity.setEmail(updatedDTO.getEmail());
+        existingEntity.setGender(updatedDTO.getGender());
+        existingEntity.setComment(updatedDTO.getComment());
+
+    }
+
+	
 
 }

@@ -1,6 +1,7 @@
 package com.apirest.springboot.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -15,10 +16,10 @@ import com.apirest.springboot.utils.ConvertTo;
 
 @Service
 public class MotorcycleServiceImpl implements MotorcycleService {
-	
+
 	@Autowired
 	private MotorcycleRepository motorcycleRepository;
-	
+
 	@Autowired
 	private ConvertTo convertTo;
 
@@ -30,21 +31,26 @@ public class MotorcycleServiceImpl implements MotorcycleService {
 	}
 
 	@Override
-    public List<MotorcycleDTO> getAllMotorcyclesByCustomerId(Long customerId) {
-        List<Motorcycle> motorcycles = motorcycleRepository.findAllByCustomerCustomerId(customerId);
-        return motorcycles.stream()
-                .map(convertTo::mapToMotorcycleDTO)
-                .collect(Collectors.toList());
-    }
-	
+	public List<MotorcycleDTO> getAllMotorcyclesByCustomerId(Long customerId) {
+		List<Motorcycle> motorcycles = motorcycleRepository.findAllByCustomerCustomerId(customerId);
+		return motorcycles.stream().map(convertTo::mapToMotorcycleDTO).collect(Collectors.toList());
+	}
+
+	@Override
+	public Optional<MotorcycleDTO> getMotorcycleByDomain(String domain) {
+		Motorcycle motorcycle = motorcycleRepository.findByDomain(domain);
+
+		// Convertir Motorcycle a MotorcycleDTO
+		return Optional.ofNullable(convertTo.mapToMotorcycleDTO(motorcycle));
+	}
+
 //	@Override
 //	public MotorcycleDTO getMotorcycleByMotorcycleId(Long motorcycleId) {
 //		Motorcycle motorcycle = motorcycleRepository.findById(motorcycleId)
 //				.orElseThrow(() -> new ResourceNotFoundException("Motorcycle", "motorcycleId", motorcycleId));
 //		return convertTo.mapToMotorcycleDTO(motorcycle);
 //	}
-	
-	
+
 //	
 //	
 //	
@@ -63,12 +69,7 @@ public class MotorcycleServiceImpl implements MotorcycleService {
 
 //	
 //	
-//	@Override
-//	public MotorcycleDTO getMotorcycleByDomain(String domain) {
-//		Motorcycle motorcycle = motorcycleRepository.findByDomain(domain);
-////				.orElseThrow(() -> new ResourceNotFoundException(": " + domain));
-//		return convertTo.mapToMotorcycleDTO(motorcycle);
-//	}
+
 //
 //	@Override
 //	public MotorcycleDTO updateMotorcycle(MotorcycleDTO motorcycleDTO, Long motorcycleId) {
@@ -87,13 +88,5 @@ public class MotorcycleServiceImpl implements MotorcycleService {
 //				.orElseThrow(() -> new ResourceNotFoundException("Motorcycle", "motorcycleId", motorcycleId));
 //		motorcycleRepository.delete(motorcycle);
 //	}
-
-
-
-
-
-
-
-
 
 }
