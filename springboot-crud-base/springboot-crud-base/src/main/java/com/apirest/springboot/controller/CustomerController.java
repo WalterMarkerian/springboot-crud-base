@@ -44,17 +44,17 @@ public class CustomerController {
 		return customerService.getAllCustomers();
 	}
 
-	@PostMapping("/crear")
-	public ResponseEntity<CustomerDTO> saveCustomer(@RequestBody CustomerDTO customerDTO){
-		Customer customer = convertTo.mapToCustomerEntity(customerDTO);
-//		Motorcycle motorcycle = converterTo.mapToMotorcycleEntity(motorcycleDTO);
-//		logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CustomerController: " + customer);
-		return new ResponseEntity<>(customerService.createCustomer(customerDTO),HttpStatus.CREATED);
-	}
+//	@PostMapping("/crear")
+//	public ResponseEntity<CustomerDTO> saveCustomer(@RequestBody CustomerDTO customerDTO){
+//		Customer customer = convertTo.mapToCustomerEntity(customerDTO);
+////		Motorcycle motorcycle = converterTo.mapToMotorcycleEntity(motorcycleDTO);
+////		logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CustomerController: " + customer);
+//		return new ResponseEntity<>(customerService.createCustomer(customerDTO),HttpStatus.CREATED);
+//	}
 	
-    @PostMapping("/createWithMotorcycles")
-    public ResponseEntity<CustomerDTO> createCustomerWithMotorcycles(@RequestBody CustomerDTO customerDTO) {
-        CustomerDTO createdCustomer = customerService.createCustomerWithMotorcycles(customerDTO);
+    @PostMapping("/crearClienteConMoto")
+    public ResponseEntity<CustomerDTO> createCustomer(@RequestBody CustomerDTO customerDTO) {
+        CustomerDTO createdCustomer = customerService.createCustomer(customerDTO);
         return new ResponseEntity<>(createdCustomer, HttpStatus.CREATED);
     }
 	

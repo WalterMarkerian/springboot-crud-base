@@ -40,24 +40,24 @@ public class CustomerServiceImpl implements CustomerService {
 		return customers.stream().map(customer -> convertTo.mapToCustomerDTO(customer)).collect(Collectors.toList());
 	}
 
-	@Override
-	public CustomerDTO createCustomer(CustomerDTO customerDTO) {
-		Customer customer = convertTo.mapToCustomerEntity(customerDTO);
-//			Motorcycle motorcycle = converterTo.mapToMotorcycleEntity(motorcycleDTO);
-		logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CustomerServiceImpl: " + customer);
-//			logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!motorcycle: " + motorcycle);
-
-		Customer newCustomer = customerRepository.save(customer);
-//			Motorcycle newMotorcycle = motorcycleRepository.save(motorcycle);
-//			logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!customer: " + newCustomer);
-//			logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!motorcycle: " + newMotorcycle);
-
-		return convertTo.mapToCustomerDTO(newCustomer);
-
-	}
+//	@Override
+//	public CustomerDTO createCustomer(CustomerDTO customerDTO) {
+//		Customer customer = convertTo.mapToCustomerEntity(customerDTO);
+////			Motorcycle motorcycle = converterTo.mapToMotorcycleEntity(motorcycleDTO);
+//		logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CustomerServiceImpl: " + customer);
+////			logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!motorcycle: " + motorcycle);
+//
+//		Customer newCustomer = customerRepository.save(customer);
+////			Motorcycle newMotorcycle = motorcycleRepository.save(motorcycle);
+////			logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!customer: " + newCustomer);
+////			logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!motorcycle: " + newMotorcycle);
+//
+//		return convertTo.mapToCustomerDTO(newCustomer);
+//
+//	}
 
     @Transactional
-	public CustomerDTO createCustomerWithMotorcycles(CustomerDTO customerDTO) {
+	public CustomerDTO createCustomer(CustomerDTO customerDTO) {
         // Mapea el DTO del cliente a la entidad Customer
 		Customer customer = convertTo.mapToCustomerEntity(customerDTO);
 
