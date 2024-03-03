@@ -1,6 +1,5 @@
 package com.apirest.springboot.entities;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -24,21 +23,20 @@ public class Motorcycle {
 	private String domain;
 	@Column(name = "brand", nullable = false)
 	private String brand;
-	@Column(name = "kilometers", nullable = false)
-	private String kilometers;
-	@Column(name = "chassis", nullable = false)
-	private String chassis;
-	@Column(name = "motorNumber", nullable = false)
-	private String motorNumber;
 	@Column(name = "model", nullable = false)
 	private String model;
 	@Column(name = "cylinder", nullable = false)
 	private String cylinder;
 	@Column(name = "year", nullable = false)
 	private String year;
+	@Column(name = "chassis", nullable = false)
+	private String chassis;
+	@Column(name = "motorNumber", nullable = false)
+	private String motorNumber;
+	@Column(name = "kilometers", nullable = false)
+	private String kilometers;
 	@Column(name = "comment", nullable = true)
 	private String comment;
-	
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)

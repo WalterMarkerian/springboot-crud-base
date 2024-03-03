@@ -11,6 +11,7 @@ public interface MotorcycleService {
 //	public MotorcycleDTO createMotorcycle(MotorcycleDTO motorcycleDTO);
 	public List<MotorcycleDTO> getAllMotorcyclesByCustomerId(Long customerId);
 	public Optional<MotorcycleDTO> getMotorcycleByDomain(String domain);	
+//	public MotorcycleDTO updateMotorcycle(MotorcycleDTO updatedMotorcycleDTO);
 
 
 	

@@ -6,15 +6,18 @@ import java.util.List;
 import com.apirest.springboot.utils.Genders;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(exclude = "motorcycles")
 public class CustomerDTO {
 	private Long customerId;
 	private String name;
 	private String surname;
+	private String dni;
+	private Genders gender;
 	private String phone;
 	private String email;
-	private Genders gender;
 	private String comment;
 
     private List<MotorcycleDTO> motorcycles = new ArrayList<>();

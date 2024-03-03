@@ -12,9 +12,9 @@ public class ResourceNotFoundException extends RuntimeException{
 	private static final long serialVersionUID = 1L;
 	private String resourceName;
 	private String resourceField;
-	private Long fieldValue;
+	private Object fieldValue;
 	
-	public ResourceNotFoundException(String resourceName, String resourceField, long fieldValue) {
+	public ResourceNotFoundException(String resourceName, String resourceField, Object fieldValue) {
 		super(String.format("%s no encontrado con : %s : '%s'",resourceName,resourceField,fieldValue));
 		this.resourceName = resourceName;
 		this.resourceField = resourceField;

@@ -2,10 +2,13 @@ package com.apirest.springboot.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,12 +26,15 @@ import com.apirest.springboot.service.CustomerService;
 import com.apirest.springboot.service.CustomerServiceImpl;
 import com.apirest.springboot.utils.ConvertTo;
 
+
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
 @RestController
 @RequestMapping("/clientes")
+@Validated
 public class CustomerController {
 
 	@Autowired
@@ -45,19 +51,19 @@ public class CustomerController {
 	}
 	
     @GetMapping("/porCliente")
-    public ResponseEntity<CustomerDTO> getCustomerById(@RequestParam Long customerId) {
+    public ResponseEntity<CustomerDTO> getCustomerById(@Valid @RequestParam Long customerId) {
         CustomerDTO customer = customerService.getCustomerById(customerId);
         return new ResponseEntity<>(customer, HttpStatus.OK);
     }
     
     @PutMapping("/actualizar")
-    public ResponseEntity<CustomerDTO> updateCustomer(@RequestBody CustomerDTO updatedCustomerDTO) {
+    public ResponseEntity<CustomerDTO> updateCustomer(@Valid @RequestBody CustomerDTO updatedCustomerDTO) {
         CustomerDTO updatedCustomer = customerService.updateCustomer(updatedCustomerDTO);
         return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
     }
 
     @PostMapping("/crearClienteConMoto")
-    public ResponseEntity<CustomerDTO> createCustomer(@RequestBody CustomerDTO customerDTO) {
+    public ResponseEntity<CustomerDTO> createCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
         CustomerDTO createdCustomer = customerService.createCustomerWhitMotorcycle(customerDTO);
         return new ResponseEntity<>(createdCustomer, HttpStatus.CREATED);
     }

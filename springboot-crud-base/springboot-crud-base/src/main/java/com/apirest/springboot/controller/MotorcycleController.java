@@ -2,11 +2,12 @@ package com.apirest.springboot.controller;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import com.apirest.springboot.utils.ConvertTo;
 
 @RestController
 @RequestMapping("/motos")
+@Validated
 public class MotorcycleController {
 
     @Autowired
@@ -37,13 +39,13 @@ public class MotorcycleController {
     }
 
 	@GetMapping("/porCliente")
-	public ResponseEntity<List<MotorcycleDTO>> getAllMotorcyclesByCustomerId(@RequestParam Long customerId) {
+	public ResponseEntity<List<MotorcycleDTO>> getAllMotorcyclesByCustomerId(@Valid @RequestParam Long customerId) {
 		List<MotorcycleDTO> motorcycles = motorcycleService.getAllMotorcyclesByCustomerId(customerId);
 		return ResponseEntity.ok(motorcycles);
 	}
 
 	@GetMapping("/porDominio")
-	public ResponseEntity<MotorcycleDTO> getMotorcycleByDomain(@RequestParam String domain) {
+	public ResponseEntity<MotorcycleDTO> getMotorcycleByDomain(@Valid @RequestParam String domain) {
 		Optional<MotorcycleDTO> motorcycle = motorcycleService.getMotorcycleByDomain(domain);
 
 		return motorcycle.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());

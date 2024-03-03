@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import com.apirest.springboot.dto.CustomerDTO;
 import com.apirest.springboot.dto.MotorcycleDTO;
@@ -21,6 +22,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Service
+@Validated
 public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
@@ -34,11 +36,17 @@ public class CustomerServiceImpl implements CustomerService {
 
 	private static final Logger logger = LogManager.getLogger(CustomerServiceImpl.class);
 
-
 	@Override
 	public CustomerDTO getCustomerById(Long customerId) {
 		Customer customer = customerRepository.findById(customerId)
 				.orElseThrow(() -> new ResourceNotFoundException("Customer", "customerId", customerId));
+		return convertTo.mapToCustomerDTO(customer);
+	}
+	
+	@Override
+	public CustomerDTO getCustomerByDni(String dni) {
+		Customer customer = customerRepository.findByDni(dni)
+				.orElseThrow(() -> new ResourceNotFoundException("Customer", "dni", dni));
 		return convertTo.mapToCustomerDTO(customer);
 	}
 
@@ -81,23 +89,53 @@ public class CustomerServiceImpl implements CustomerService {
 		return convertTo.mapToCustomerDTO(newCustomer);
 	}
 
+//	@Override
+//    public CustomerDTO updateCustomer(CustomerDTO updatedCustomerDTO) {
+//        Customer existingCustomer = customerRepository.findById(updatedCustomerDTO.getCustomerId())
+//                .orElseThrow(() -> new ResourceNotFoundException("No se encontró el cliente con ID: ", "customerId", updatedCustomerDTO.getCustomerId()));
+//
+//        convertTo.mapUpdatedCustomerDTOToEntity(updatedCustomerDTO, existingCustomer);
+//        existingCustomer = customerRepository.save(existingCustomer);
+//
+//        return convertTo.mapToCustomerDTO(existingCustomer);
+//    }
+
 	@Override
-    public CustomerDTO updateCustomer(CustomerDTO updatedCustomerDTO) {
-        Customer existingCustomer = customerRepository.findById(updatedCustomerDTO.getCustomerId())
-                .orElseThrow(() -> new ResourceNotFoundException("No se encontró el cliente con ID: ", "customerId", updatedCustomerDTO.getCustomerId()));
+	public CustomerDTO updateCustomer(CustomerDTO updatedCustomerDTO) {
+		Customer existingCustomer = customerRepository.findById(updatedCustomerDTO.getCustomerId())
+				.orElseThrow(() -> new ResourceNotFoundException("No se encontró el cliente con ID: ", "customerId",
+						updatedCustomerDTO.getCustomerId()));
 
-        convertTo.mapUpdatedCustomerDTOToEntity(updatedCustomerDTO, existingCustomer);
-        existingCustomer = customerRepository.save(existingCustomer);
+		// Mapear propiedades simples
+		convertTo.mapUpdatedCustomerDTOToEntity(updatedCustomerDTO, existingCustomer);
 
-        return convertTo.mapToCustomerDTO(existingCustomer);
-    }
+		// Manejar la lista de motocicletas
+		List<Motorcycle> existingMotorcycles = existingCustomer.getMotorcycles();
+		List<MotorcycleDTO> updatedMotorcyclesDTO = updatedCustomerDTO.getMotorcycles();
+
+		// Verificar si existen motocicletas en la lista actual y en la lista
+		// actualizada
+		if (existingMotorcycles != null && updatedMotorcyclesDTO != null) {
+			// Mapear las motocicletas existentes y agregar las nuevas
+			List<Motorcycle> updatedMotorcycles = updatedMotorcyclesDTO.stream()
+					.map(motorcycleDTO -> convertTo.mapToMotorcycleEntity(motorcycleDTO)).collect(Collectors.toList());
+			existingMotorcycles.addAll(updatedMotorcycles);
+		} else if (updatedMotorcyclesDTO != null) {
+			// Si no hay motocicletas existentes, simplemente mapear las motocicletas
+			// actualizadas
+			existingCustomer.setMotorcycles(updatedMotorcyclesDTO.stream()
+			        .map(convertTo::mapToMotorcycleEntity)
+			        .collect(Collectors.toList()));
+		}
+
+		// Guardar el cliente actualizado en el repositorio
+		existingCustomer = customerRepository.save(existingCustomer);
+
+		return convertTo.mapToCustomerDTO(existingCustomer);
+	}
 
 
-	
-	
-	
-	
-	
+
 //
 //
 //	

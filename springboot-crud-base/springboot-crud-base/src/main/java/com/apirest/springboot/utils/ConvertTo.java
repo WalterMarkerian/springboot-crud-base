@@ -18,6 +18,7 @@ public class ConvertTo {
 	    CustomerDTO customerDTO = new CustomerDTO();
 	    customerDTO.setCustomerId(customer.getCustomerId());
 	    customerDTO.setName(customer.getName());
+	    customerDTO.setDni(customer.getDni());
 	    customerDTO.setSurname(customer.getSurname());
 	    customerDTO.setPhone(customer.getPhone());
 	    customerDTO.setEmail(customer.getEmail());
@@ -39,6 +40,7 @@ public class ConvertTo {
 		Customer customer = new Customer();
 		customer.setCustomerId(customerDTO.getCustomerId());
 		customer.setName(customerDTO.getName());
+	    customer.setDni(customerDTO.getDni());
 		customer.setSurname(customerDTO.getSurname());
 		customer.setPhone(customerDTO.getPhone());
 		customer.setEmail(customerDTO.getEmail());
@@ -97,6 +99,7 @@ public class ConvertTo {
 	public void mapUpdatedCustomerDTOToEntity(CustomerDTO updatedDTO, Customer existingEntity) {
         // Mapear los campos que deseas actualizar
         existingEntity.setName(updatedDTO.getName());
+        existingEntity.setDni(updatedDTO.getDni());
         existingEntity.setSurname(updatedDTO.getSurname());
         existingEntity.setPhone(updatedDTO.getPhone());
         existingEntity.setEmail(updatedDTO.getEmail());

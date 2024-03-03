@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import com.apirest.springboot.dto.MotorcycleDTO;
 import com.apirest.springboot.entities.Motorcycle;
@@ -15,6 +16,7 @@ import com.apirest.springboot.repository.MotorcycleRepository;
 import com.apirest.springboot.utils.ConvertTo;
 
 @Service
+@Validated
 public class MotorcycleServiceImpl implements MotorcycleService {
 
 	@Autowired
@@ -43,6 +45,13 @@ public class MotorcycleServiceImpl implements MotorcycleService {
 		// Convertir Motorcycle a MotorcycleDTO
 		return Optional.ofNullable(convertTo.mapToMotorcycleDTO(motorcycle));
 	}
+
+//	@Override
+//	public MotorcycleDTO updateMotorcycle(MotorcycleDTO updatedMotorcycleDTO) {
+//		Motorcycle extistingMotorcycle = motorcycleRepository.findByDomain(updatedMotorcycleDTO.getDomain())
+//				.orElseThrow(( -> new ResourceNotFoundException("")))
+//		return null;
+//	}
 
 //	@Override
 //	public MotorcycleDTO getMotorcycleByMotorcycleId(Long motorcycleId) {

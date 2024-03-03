@@ -13,6 +13,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 //	@Query("SELECT c FROM Customer c LEFT JOIN FETCH c.motorcycles")
 //	List<Customer> findAllWithMotorcycles();
     Optional<Customer> findById(Long customerId);
+    Optional<Customer> findByDni(String dni);
 
 	
 
