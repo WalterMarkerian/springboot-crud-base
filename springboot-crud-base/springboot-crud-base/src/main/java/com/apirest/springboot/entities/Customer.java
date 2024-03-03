@@ -1,5 +1,6 @@
 package com.apirest.springboot.entities;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,4 +48,12 @@ public class Customer {
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Motorcycle> motorcycles;
 	
+    public List<Motorcycle> getMotorcycles() {
+        return motorcycles != null ? motorcycles : Collections.emptyList();
+    }
+
+    public void setMotorcycles(List<Motorcycle> motorcycles) {
+        this.motorcycles = motorcycles;
+    }
+    
 }

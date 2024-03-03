@@ -15,24 +15,24 @@ import com.apirest.springboot.entities.Motorcycle;
 public class ConvertTo {
 		
 	public CustomerDTO mapToCustomerDTO(Customer customer) {
-        CustomerDTO customerDTO = new CustomerDTO();
-        customerDTO.setCustomerId(customer.getCustomerId());
-        customerDTO.setName(customer.getName());
-        customerDTO.setSurname(customer.getSurname());
-        customerDTO.setPhone(customer.getPhone());
-        customerDTO.setEmail(customer.getEmail());
-        customerDTO.setGender(customer.getGender());
-        customerDTO.setComment(customer.getComment());
+	    CustomerDTO customerDTO = new CustomerDTO();
+	    customerDTO.setCustomerId(customer.getCustomerId());
+	    customerDTO.setName(customer.getName());
+	    customerDTO.setSurname(customer.getSurname());
+	    customerDTO.setPhone(customer.getPhone());
+	    customerDTO.setEmail(customer.getEmail());
+	    customerDTO.setGender(customer.getGender());
+	    customerDTO.setComment(customer.getComment());
 
-        List<MotorcycleDTO> motorcycleDTOs = customer.getMotorcycles()
-                .stream()
-                .map(this::mapToMotorcycleDTO)
-                .collect(Collectors.toList());
+	    List<MotorcycleDTO> motorcycleDTOs = customer.getMotorcycles()
+	            .stream()
+	            .map(this::mapToMotorcycleDTO)
+	            .collect(Collectors.toList());
 
-        customerDTO.setMotorcycles(motorcycleDTOs);
+	    customerDTO.setMotorcycles(motorcycleDTOs);
 
-        return customerDTO;
-    }
+	    return customerDTO;
+	}
 	
 	
 	public Customer mapToCustomerEntity(CustomerDTO customerDTO) {

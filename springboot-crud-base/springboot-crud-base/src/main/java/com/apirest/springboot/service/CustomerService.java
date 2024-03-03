@@ -11,6 +11,7 @@ public interface CustomerService {
 	public CustomerDTO createCustomerWhitMotorcycle(CustomerDTO customerDTO);
 	public CustomerDTO getCustomerById(Long customerId);
 	public CustomerDTO updateCustomer(CustomerDTO updatedCustomerDTO);
+	CustomerDTO createCustomerWithoutMotorcycle(CustomerDTO customerDTO);
 
 
 //	public List<CustomerDTO> getAllMotoyclesByCustomer();

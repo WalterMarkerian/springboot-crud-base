@@ -48,12 +48,12 @@ public class CustomerServiceImpl implements CustomerService {
 		return customers.stream().map(customer -> convertTo.mapToCustomerDTO(customer)).collect(Collectors.toList());
 	}
 
-//	@Override
-//	public CustomerDTO createCustomer(CustomerDTO customerDTO) {
-//		Customer customer = convertTo.mapToCustomerEntity(customerDTO);
-//		Customer newCustomer = customerRepository.save(customer);
-//		return convertTo.mapToCustomerDTO(newCustomer);
-//	}
+	@Override
+	public CustomerDTO createCustomerWithoutMotorcycle(CustomerDTO customerDTO) {
+		Customer customer = convertTo.mapToCustomerEntity(customerDTO);
+		Customer newCustomer = customerRepository.save(customer);
+		return convertTo.mapToCustomerDTO(newCustomer);
+	}
 
 	@Transactional
 	public CustomerDTO createCustomerWhitMotorcycle(CustomerDTO customerDTO) {
@@ -72,13 +72,13 @@ public class CustomerServiceImpl implements CustomerService {
 		customer.setMotorcycles(motorcycles);
 
 		// Guarda el customer y sus motorcycles en la base de datos
-		Customer savedCustomer = customerRepository.save(customer);
+		Customer newCustomer = customerRepository.save(customer);
 
 		// Puedes guardar también los motorcycles si lo necesitas
 		// motorcycleRepository.saveAll(motorcycles);
 
 		// Mapea la entidad Customer nuevamente a un DTO para devolverlo
-		return convertTo.mapToCustomerDTO(savedCustomer);
+		return convertTo.mapToCustomerDTO(newCustomer);
 	}
 
 	@Override

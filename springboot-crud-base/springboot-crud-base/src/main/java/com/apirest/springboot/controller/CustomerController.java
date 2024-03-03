@@ -36,7 +36,6 @@ public class CustomerController {
 	
 	@Autowired
 	private ConvertTo convertTo;
-
 	
     private static final Logger logger = LogManager.getLogger(CustomerController.class);
     
@@ -57,22 +56,18 @@ public class CustomerController {
         return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
     }
 
-//	@PostMapping("/crear")
-//	public ResponseEntity<CustomerDTO> saveCustomer(@RequestBody CustomerDTO customerDTO){
-//		Customer customer = convertTo.mapToCustomerEntity(customerDTO);
-//		return new ResponseEntity<>(customerService.createCustomer(customerDTO),HttpStatus.CREATED);
-//	}
-	
     @PostMapping("/crearClienteConMoto")
     public ResponseEntity<CustomerDTO> createCustomer(@RequestBody CustomerDTO customerDTO) {
         CustomerDTO createdCustomer = customerService.createCustomerWhitMotorcycle(customerDTO);
         return new ResponseEntity<>(createdCustomer, HttpStatus.CREATED);
     }
 	
-    
+//	@PostMapping("/crear")
+//	public ResponseEntity<CustomerDTO> saveCustomer(@RequestBody CustomerDTO customerDTO){
+//		Customer customer = convertTo.mapToCustomerEntity(customerDTO);
+//		return new ResponseEntity<>(customerService.createCustomer(customerDTO),HttpStatus.CREATED);
+//	}    
 
-	
-	
 //	@PostMapping("/crear")
 //	public ResponseEntity<CustomerDTO> saveCustomer(@RequestBody CustomerDTO customerDTO, MotorcycleDTO motorcycleDTO){
 //		return new ResponseEntity<>(customerService.createCustomer(customerDTO, motorcycleDTO),HttpStatus.CREATED);
@@ -82,7 +77,7 @@ public class CustomerController {
 //    public List<CustomerDTO> getAllCustomersWithMotorcycles() {
 //        return customerService.getAllCustomersWithMotorcycles();
 //    }
-//	
+   
 //	@GetMapping("/{customerId}/motos")
 //	public List<MotorcycleDTO> getAllMotorcyclesByCustomerId(@PathVariable(value = "customerId") Long customerId){
 //		return customerService.getAllMotorcyclesByCustomerId(customerId);
