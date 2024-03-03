@@ -1,6 +1,7 @@
 package com.apirest.springboot.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,12 @@ import com.apirest.springboot.dto.CustomerDTO;
 import com.apirest.springboot.dto.MotorcycleDTO;
 import com.apirest.springboot.entities.Customer;
 import com.apirest.springboot.entities.Motorcycle;
+import com.apirest.springboot.exceptions.CustomerAlreadyExistsException;
 import com.apirest.springboot.exceptions.ResourceNotFoundException;
 import com.apirest.springboot.repository.CustomerRepository;
 import com.apirest.springboot.repository.MotorcycleRepository;
 import com.apirest.springboot.utils.ConvertTo;
+import com.apirest.springboot.utils.DefaultValues;
 
 import jakarta.transaction.Transactional;
 
@@ -44,6 +47,13 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 	
 	@Override
+	public CustomerDTO findByDni(String dni) {
+		Customer customer = customerRepository.findByDni(dni)
+				.orElseThrow(() -> new ResourceNotFoundException("Customer", "dni", dni));
+		return convertTo.mapToCustomerDTO(customer);
+	}
+	
+	@Override
 	public CustomerDTO getCustomerByDni(String dni) {
 		Customer customer = customerRepository.findByDni(dni)
 				.orElseThrow(() -> new ResourceNotFoundException("Customer", "dni", dni));
@@ -65,6 +75,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Transactional
 	public CustomerDTO createCustomerWhitMotorcycle(CustomerDTO customerDTO) {
+			    
 		// Mapea el DTO del cliente a la entidad Customer
 		Customer customer = convertTo.mapToCustomerEntity(customerDTO);
 
@@ -103,7 +114,7 @@ public class CustomerServiceImpl implements CustomerService {
 	@Override
 	public CustomerDTO updateCustomer(CustomerDTO updatedCustomerDTO) {
 		Customer existingCustomer = customerRepository.findById(updatedCustomerDTO.getCustomerId())
-				.orElseThrow(() -> new ResourceNotFoundException("No se encontró el cliente con ID: ", "customerId",
+				.orElseThrow(() -> new ResourceNotFoundException(DefaultValues.CLIENT_NOT_FOUND, "customerId",
 						updatedCustomerDTO.getCustomerId()));
 
 		// Mapear propiedades simples
@@ -149,6 +160,11 @@ public class CustomerServiceImpl implements CustomerService {
         // Mapear el cliente actualizado a un DTO y devolverlo
         return convertTo.mapToCustomerDTO(updatedCustomer);
     }
+
+
+
+
+
 
 
 

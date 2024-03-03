@@ -55,6 +55,11 @@ public class CustomerController {
         CustomerDTO customer = customerService.getCustomerById(customerId);
         return new ResponseEntity<>(customer, HttpStatus.OK);
     }
+    @GetMapping("/porDni")
+    public ResponseEntity<CustomerDTO> getCustomerByDni(@Valid @RequestParam String dni) {
+        CustomerDTO customer = customerService.getCustomerByDni(dni);
+        return new ResponseEntity<>(customer, HttpStatus.OK);
+    }
     
     @PutMapping("/actualizar")
     public ResponseEntity<CustomerDTO> updateCustomer(@Valid @RequestBody CustomerDTO updatedCustomerDTO) {

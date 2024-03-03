@@ -14,7 +14,8 @@ public interface CustomerService {
 	public CustomerDTO updateCustomer(CustomerDTO updatedCustomerDTO);
 	public CustomerDTO createCustomerWithoutMotorcycle(CustomerDTO customerDTO);
 	public CustomerDTO addMotorcycleToCustomer(Long customerId, MotorcycleDTO motorcycleDTO);
-
+	public CustomerDTO findByDni(String dni);
+	
 //	public List<CustomerDTO> getAllMotoyclesByCustomer();
 //	public CustomerDTO getCustomerById(Long customerId);
 //	public List<MotorcycleDTO> getAllMotorcyclesByCustomerId(Long customerId);
