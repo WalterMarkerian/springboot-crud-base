@@ -134,6 +134,22 @@ public class CustomerServiceImpl implements CustomerService {
 		return convertTo.mapToCustomerDTO(existingCustomer);
 	}
 
+	@Override
+	public CustomerDTO addMotorcycleToCustomer(Long customerId, MotorcycleDTO motorcycleDTO) {
+		Customer existingCustomer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer", "customerId", customerId));
+
+        // Mapear la MotorcycleDTO a una entidad Motorcycle y agregarla al cliente
+        Motorcycle motorcycleEntity = convertTo.mapToMotorcycleEntity(motorcycleDTO);
+        existingCustomer.addMotorcycle(motorcycleEntity);
+
+        // Guardar el cliente actualizado en la base de datos
+        Customer updatedCustomer = customerRepository.save(existingCustomer);
+
+        // Mapear el cliente actualizado a un DTO y devolverlo
+        return convertTo.mapToCustomerDTO(updatedCustomer);
+    }
+
 
 
 //

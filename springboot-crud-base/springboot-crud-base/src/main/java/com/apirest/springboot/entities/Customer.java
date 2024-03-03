@@ -50,5 +50,10 @@ public class Customer {
 	public void setMotorcycles(List<Motorcycle> motorcycles) {
 		this.motorcycles = motorcycles;
 	}
+	
+    public void addMotorcycle(Motorcycle motorcycle) {
+        motorcycles.add(motorcycle);
+        motorcycle.setCustomer(this);
+    }
 
 }

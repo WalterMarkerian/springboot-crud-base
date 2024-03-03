@@ -67,6 +67,14 @@ public class CustomerController {
         CustomerDTO createdCustomer = customerService.createCustomerWhitMotorcycle(customerDTO);
         return new ResponseEntity<>(createdCustomer, HttpStatus.CREATED);
     }
+    
+    @PutMapping("/agregarMoto")
+    public ResponseEntity<CustomerDTO> addMotorcycleToCustomer(
+            @RequestParam Long customerId,
+            @Valid @RequestBody MotorcycleDTO motorcycleDTO) {
+        CustomerDTO updatedCustomer = customerService.addMotorcycleToCustomer(customerId, motorcycleDTO);
+        return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
+    }
 	
 //	@PostMapping("/crear")
 //	public ResponseEntity<CustomerDTO> saveCustomer(@RequestBody CustomerDTO customerDTO){
