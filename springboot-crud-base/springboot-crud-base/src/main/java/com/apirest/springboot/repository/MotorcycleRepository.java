@@ -12,8 +12,8 @@ import com.apirest.springboot.entities.Motorcycle;
 public interface MotorcycleRepository extends JpaRepository<Motorcycle, Long> {
 
 	Optional<Motorcycle> findById(Long motorcycleId);
-	public List<Motorcycle> findAllByCustomerCustomerId(Long customerId);	
-	Motorcycle findByDomain(String domain);
+	List<Motorcycle> findAllByCustomerCustomerId(Long customerId);	
+	Optional<Motorcycle> findByDomain(String domain);
 	
 
 }

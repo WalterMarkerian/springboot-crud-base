@@ -24,9 +24,8 @@ import com.apirest.springboot.dto.MotorcycleDTO;
 import com.apirest.springboot.entities.Customer;
 import com.apirest.springboot.service.CustomerService;
 import com.apirest.springboot.service.CustomerServiceImpl;
-import com.apirest.springboot.utils.ConvertTo;
-
-
+import com.apirest.springboot.utils.Utils;
+import com.apirest.springboot.utils.DefaultValues;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,7 +40,7 @@ public class CustomerController {
 	private CustomerService customerService;
 	
 	@Autowired
-	private ConvertTo convertTo;
+	private Utils utils;
 	
     private static final Logger logger = LogManager.getLogger(CustomerController.class);
     
@@ -73,49 +72,28 @@ public class CustomerController {
         return new ResponseEntity<>(createdCustomer, HttpStatus.CREATED);
     }
     
-    @PutMapping("/agregarMoto")
+	@PutMapping("/agregarMoto")
     public ResponseEntity<CustomerDTO> addMotorcycleToCustomer(
-            @RequestParam Long customerId,
+            @RequestParam String dni,
             @Valid @RequestBody MotorcycleDTO motorcycleDTO) {
-        CustomerDTO updatedCustomer = customerService.addMotorcycleToCustomer(customerId, motorcycleDTO);
+        CustomerDTO updatedCustomer = customerService.addMotorcycleToCustomer(dni, motorcycleDTO);
+        return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
+    }
+    
+	@DeleteMapping("/borrarCliente")
+	public ResponseEntity<String> deleteCustomer(@RequestParam String dni){
+		customerService.deleteCustomerByCustomerDni(dni);
+		return new ResponseEntity<>(DefaultValues.CLIENT_DELETED_OK,HttpStatus.OK);
+	}
+	
+    @PutMapping("/update")
+    public ResponseEntity<CustomerDTO> updateCustomerByDni(
+            @RequestParam String dni,
+            @RequestBody CustomerDTO updatedCustomerDTO) {
+
+    	CustomerDTO updatedCustomer = customerService.updateCustomerByDni(dni, updatedCustomerDTO);
+        
         return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
     }
 	
-//	@PostMapping("/crear")
-//	public ResponseEntity<CustomerDTO> saveCustomer(@RequestBody CustomerDTO customerDTO){
-//		Customer customer = convertTo.mapToCustomerEntity(customerDTO);
-//		return new ResponseEntity<>(customerService.createCustomer(customerDTO),HttpStatus.CREATED);
-//	}    
-
-//	@PostMapping("/crear")
-//	public ResponseEntity<CustomerDTO> saveCustomer(@RequestBody CustomerDTO customerDTO, MotorcycleDTO motorcycleDTO){
-//		return new ResponseEntity<>(customerService.createCustomer(customerDTO, motorcycleDTO),HttpStatus.CREATED);
-//	}
-	
-//    @GetMapping("/motos")
-//    public List<CustomerDTO> getAllCustomersWithMotorcycles() {
-//        return customerService.getAllCustomersWithMotorcycles();
-//    }
-   
-//	@GetMapping("/{customerId}/motos")
-//	public List<MotorcycleDTO> getAllMotorcyclesByCustomerId(@PathVariable(value = "customerId") Long customerId){
-//		return customerService.getAllMotorcyclesByCustomerId(customerId);
-//	}
-//	
-//	@GetMapping("/{customerId}")
-//	public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable(name = "customerId") Long customerId){
-//		return ResponseEntity.ok(customerService.getCustomerById(customerId));
-//	}
-//	
-//	
-
-//	
-
-//	
-//	@DeleteMapping("/{id}")
-//	public ResponseEntity<String> deleteCustomer(@PathVariable(name = "customerId") Long customerId){
-//		customerService.deleteCustomerByCustomerId(customerId);
-//		return new ResponseEntity<>("Customer deleted successfully",HttpStatus.OK);
-//	}
-
 }

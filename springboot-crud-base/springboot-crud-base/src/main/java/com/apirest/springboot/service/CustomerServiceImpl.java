@@ -16,7 +16,7 @@ import com.apirest.springboot.exceptions.CustomerAlreadyExistsException;
 import com.apirest.springboot.exceptions.ResourceNotFoundException;
 import com.apirest.springboot.repository.CustomerRepository;
 import com.apirest.springboot.repository.MotorcycleRepository;
-import com.apirest.springboot.utils.ConvertTo;
+import com.apirest.springboot.utils.Utils;
 import com.apirest.springboot.utils.DefaultValues;
 
 import jakarta.transaction.Transactional;
@@ -35,182 +35,117 @@ public class CustomerServiceImpl implements CustomerService {
 	private MotorcycleRepository motorcycleRepository;
 
 	@Autowired
-	private ConvertTo convertTo;
+	private Utils utils;
 
 	private static final Logger logger = LogManager.getLogger(CustomerServiceImpl.class);
 
 	@Override
-	public CustomerDTO getCustomerById(Long customerId) {
-		Customer customer = customerRepository.findById(customerId)
-				.orElseThrow(() -> new ResourceNotFoundException("Customer", "customerId", customerId));
-		return convertTo.mapToCustomerDTO(customer);
+	public List<CustomerDTO> getAllCustomers() {
+		List<Customer> customers = customerRepository.findAll();
+		return customers.stream().map(customer -> utils.mapToCustomerDTO(customer)).collect(Collectors.toList());
 	}
 	
 	@Override
-	public CustomerDTO findByDni(String dni) {
-		Customer customer = customerRepository.findByDni(dni)
-				.orElseThrow(() -> new ResourceNotFoundException("Customer", "dni", dni));
-		return convertTo.mapToCustomerDTO(customer);
+	public CustomerDTO getCustomerById(Long customerId) {
+		Customer customer = customerRepository.findById(customerId)
+				.orElseThrow(() -> new ResourceNotFoundException("Customer", "customerId", customerId));
+		return utils.mapToCustomerDTO(customer);
 	}
-	
+
 	@Override
 	public CustomerDTO getCustomerByDni(String dni) {
 		Customer customer = customerRepository.findByDni(dni)
 				.orElseThrow(() -> new ResourceNotFoundException("Customer", "dni", dni));
-		return convertTo.mapToCustomerDTO(customer);
+		return utils.mapToCustomerDTO(customer);
 	}
 
-	@Override
-	public List<CustomerDTO> getAllCustomers() {
-		List<Customer> customers = customerRepository.findAll();
-		return customers.stream().map(customer -> convertTo.mapToCustomerDTO(customer)).collect(Collectors.toList());
-	}
 
 	@Override
+	@Transactional
 	public CustomerDTO createCustomerWithoutMotorcycle(CustomerDTO customerDTO) {
-		Customer customer = convertTo.mapToCustomerEntity(customerDTO);
+		Customer customer = utils.mapToCustomerEntity(customerDTO);
 		Customer newCustomer = customerRepository.save(customer);
-		return convertTo.mapToCustomerDTO(newCustomer);
+		return utils.mapToCustomerDTO(newCustomer);
 	}
 
 	@Transactional
 	public CustomerDTO createCustomerWhitMotorcycle(CustomerDTO customerDTO) {
-			    
+
 		// Mapea el DTO del cliente a la entidad Customer
-		Customer customer = convertTo.mapToCustomerEntity(customerDTO);
+		Customer customer = utils.mapToCustomerEntity(customerDTO);
 
 		// Mapea los DTO de motocicletas a entidades Motorcycle
 		List<Motorcycle> motorcycles = customerDTO.getMotorcycles().stream()
-				.map(motorcycleDTO -> convertTo.mapToMotorcycleEntity(motorcycleDTO)).collect(Collectors.toList());
+				.map(motorcycleDTO -> utils.mapToMotorcycleEntity(motorcycleDTO)).collect(Collectors.toList());
 
 		// Establece la relación entre Customer y Motorcycle
 		for (Motorcycle motorcycle : motorcycles) {
 			motorcycle.setCustomer(customer);
 		}
-		// Asigna la lista de motorcycles al customer
 		customer.setMotorcycles(motorcycles);
-
-		// Guarda el customer y sus motorcycles en la base de datos
 		Customer newCustomer = customerRepository.save(customer);
+		motorcycleRepository.saveAll(motorcycles);
 
-		// Puedes guardar también los motorcycles si lo necesitas
-		// motorcycleRepository.saveAll(motorcycles);
-
-		// Mapea la entidad Customer nuevamente a un DTO para devolverlo
-		return convertTo.mapToCustomerDTO(newCustomer);
+		return utils.mapToCustomerDTO(newCustomer);
 	}
 
-//	@Override
-//    public CustomerDTO updateCustomer(CustomerDTO updatedCustomerDTO) {
-//        Customer existingCustomer = customerRepository.findById(updatedCustomerDTO.getCustomerId())
-//                .orElseThrow(() -> new ResourceNotFoundException("No se encontró el cliente con ID: ", "customerId", updatedCustomerDTO.getCustomerId()));
-//
-//        convertTo.mapUpdatedCustomerDTOToEntity(updatedCustomerDTO, existingCustomer);
-//        existingCustomer = customerRepository.save(existingCustomer);
-//
-//        return convertTo.mapToCustomerDTO(existingCustomer);
-//    }
-
 	@Override
+	@Transactional
 	public CustomerDTO updateCustomer(CustomerDTO updatedCustomerDTO) {
-		Customer existingCustomer = customerRepository.findById(updatedCustomerDTO.getCustomerId())
-				.orElseThrow(() -> new ResourceNotFoundException(DefaultValues.CLIENT_NOT_FOUND, "customerId",
+		Customer existingCustomer = customerRepository.findByDni(updatedCustomerDTO.getDni())
+				.orElseThrow(() -> new ResourceNotFoundException(DefaultValues.CLIENT_NOT_FOUND_BY_DNI, "dni",
 						updatedCustomerDTO.getCustomerId()));
 
-		// Mapear propiedades simples
-		convertTo.mapUpdatedCustomerDTOToEntity(updatedCustomerDTO, existingCustomer);
-
-		// Manejar la lista de motocicletas
-		List<Motorcycle> existingMotorcycles = existingCustomer.getMotorcycles();
-		List<MotorcycleDTO> updatedMotorcyclesDTO = updatedCustomerDTO.getMotorcycles();
-
-		// Verificar si existen motocicletas en la lista actual y en la lista
-		// actualizada
-		if (existingMotorcycles != null && updatedMotorcyclesDTO != null) {
-			// Mapear las motocicletas existentes y agregar las nuevas
-			List<Motorcycle> updatedMotorcycles = updatedMotorcyclesDTO.stream()
-					.map(motorcycleDTO -> convertTo.mapToMotorcycleEntity(motorcycleDTO)).collect(Collectors.toList());
-			existingMotorcycles.addAll(updatedMotorcycles);
-		} else if (updatedMotorcyclesDTO != null) {
-			// Si no hay motocicletas existentes, simplemente mapear las motocicletas
-			// actualizadas
-			existingCustomer.setMotorcycles(updatedMotorcyclesDTO.stream()
-			        .map(convertTo::mapToMotorcycleEntity)
-			        .collect(Collectors.toList()));
-		}
-
-		// Guardar el cliente actualizado en el repositorio
+		utils.mapUpdatedCustomerDTOToEntity(updatedCustomerDTO, existingCustomer);
 		existingCustomer = customerRepository.save(existingCustomer);
 
-		return convertTo.mapToCustomerDTO(existingCustomer);
+		return utils.mapToCustomerDTO(existingCustomer);
+	}
+	
+	@Override
+	@Transactional
+	public CustomerDTO updateCustomerByDni(String dni, CustomerDTO updatedCustomerDTO) {
+		Customer existingCustomer = customerRepository.findByDni(dni)
+				.orElseThrow(() -> new ResourceNotFoundException(DefaultValues.CLIENT_NOT_FOUND_BY_DNI, "dni",
+						updatedCustomerDTO.getCustomerId()));
+		utils.updateIfNotNullOrDifferent(existingCustomer::setName, existingCustomer.getName(),
+				updatedCustomerDTO.getName());
+		utils.updateIfNotNullOrDifferent(existingCustomer::setSurname, existingCustomer.getSurname(),
+				updatedCustomerDTO.getSurname());
+		utils.updateIfNotNullOrDifferent(existingCustomer::setPhone, existingCustomer.getPhone(),
+				updatedCustomerDTO.getPhone());
+		utils.updateIfNotNullOrDifferent(existingCustomer::setEmail, existingCustomer.getPhone(),
+				updatedCustomerDTO.getPhone());
+		utils.updateIfNotNullOrDifferent(existingCustomer::setGender, existingCustomer.getGender(),
+				updatedCustomerDTO.getGender());
+		utils.updateIfNotNullOrDifferent(existingCustomer::setComment, existingCustomer.getComment(),
+				updatedCustomerDTO.getComment());
+		
+
+		existingCustomer = customerRepository.save(existingCustomer);
+
+		return utils.mapToCustomerDTO(existingCustomer);
 	}
 
 	@Override
-	public CustomerDTO addMotorcycleToCustomer(Long customerId, MotorcycleDTO motorcycleDTO) {
-		Customer existingCustomer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer", "customerId", customerId));
+	@Transactional
+	public CustomerDTO addMotorcycleToCustomer(String dni, MotorcycleDTO motorcycleDTO) {
+		Customer existingCustomer = customerRepository.findByDni(dni)
+				.orElseThrow(() -> new ResourceNotFoundException("Customer", "dni", dni));
 
-        // Mapear la MotorcycleDTO a una entidad Motorcycle y agregarla al cliente
-        Motorcycle motorcycleEntity = convertTo.mapToMotorcycleEntity(motorcycleDTO);
-        existingCustomer.addMotorcycle(motorcycleEntity);
+		Motorcycle motorcycleEntity = utils.mapToMotorcycleEntity(motorcycleDTO);
+		existingCustomer.addMotorcycle(motorcycleEntity);
+		Customer updatedCustomer = customerRepository.save(existingCustomer);
+		return utils.mapToCustomerDTO(updatedCustomer);
+	}
 
-        // Guardar el cliente actualizado en la base de datos
-        Customer updatedCustomer = customerRepository.save(existingCustomer);
+	@Override
+	@Transactional
+	public void deleteCustomerByCustomerDni(String dni) {
+		Customer customer = customerRepository.findByDni(dni)
+				.orElseThrow(() -> new ResourceNotFoundException("Customer", "dni", dni));
+		customerRepository.delete(customer);
+	}
 
-        // Mapear el cliente actualizado a un DTO y devolverlo
-        return convertTo.mapToCustomerDTO(updatedCustomer);
-    }
-
-
-
-
-
-
-
-
-//
-//
-//	
-
-//
-//	@Override
-//	public CustomerDTO updateCustomer(CustomerDTO customerDTO, Long customerId) {
-//		Customer customer = customerRepository.findById(customerId)
-//				.orElseThrow(() -> new ResourceNotFoundException("Customer", "customerId", customerId));
-//		customer.setName(customerDTO.getName());
-//		customer.setSurname(customerDTO.getSurname());
-//		customer.setPhone(customerDTO.getPhone());
-//		customer.setEmail(customerDTO.getEmail());
-//		customer.setGender(customerDTO.getGender());
-//		customer.setComment(customerDTO.getComment());
-//		
-//		Customer customerUpdated = customerRepository.save(customer);
-//		return converterTo.mapToCustomerDTO(customerUpdated);
-//	}
-//
-//	@Override
-//	public void deleteCustomerByCustomerId(Long customerId) {
-//		Customer customer = customerRepository.findById(customerId)
-//				.orElseThrow(() -> new ResourceNotFoundException("Customer", "customerId", customerId));
-//		customerRepository.delete(customer);
-//	}
-//
-//	@Override
-//	public List<CustomerDTO> getAllMotoyclesByCustomer() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public List<MotorcycleDTO> getAllMotorcyclesByCustomerId(Long customerId) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public List<CustomerDTO> getAllCustomersWithMotorcycles() {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-
+	
 }

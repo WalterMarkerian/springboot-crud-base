@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,9 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.apirest.springboot.dto.CustomerDTO;
 import com.apirest.springboot.dto.MotorcycleDTO;
 import com.apirest.springboot.service.MotorcycleService;
-import com.apirest.springboot.utils.ConvertTo;
+import com.apirest.springboot.utils.Utils;
 
 @RestController
 @RequestMapping("/motos")
@@ -29,9 +31,6 @@ public class MotorcycleController {
 
     @Autowired
     private MotorcycleService motorcycleService;
-
-    @Autowired
-    private ConvertTo convertTo;
     
     @GetMapping
     public List<MotorcycleDTO> listMotorcycles() {
@@ -50,6 +49,24 @@ public class MotorcycleController {
 
 		return motorcycle.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
 	}
+	
+    @PutMapping("/actualizar")
+    public ResponseEntity<MotorcycleDTO> updateMotorcycle(@Valid @RequestBody MotorcycleDTO updatedMotorcycleDTO) {
+    	MotorcycleDTO updatedMotorcycle = motorcycleService.updateMotorcycle(updatedMotorcycleDTO);
+        return new ResponseEntity<>(updatedMotorcycle, HttpStatus.OK);
+    }
+    
+    @PutMapping("/update")
+    public ResponseEntity<MotorcycleDTO> updateMotorcycleByDomain(
+            @RequestParam String domain,
+            @RequestBody MotorcycleDTO updatedMotorcycleDTO) {
+
+        MotorcycleDTO updatedMotorcycle = motorcycleService.updateMotorcycleByDomain(domain, updatedMotorcycleDTO);
+        
+        return new ResponseEntity<>(updatedMotorcycle, HttpStatus.OK);
+    }
+    
+    
 //	
 
 //	
